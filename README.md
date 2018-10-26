@@ -1,2 +1,2 @@
-# Eat-Da-Burge
+# Eat-Da-Burger
 Coding Bootcamp: Node Express Handlebars
