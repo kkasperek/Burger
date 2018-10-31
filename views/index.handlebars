@@ -1,0 +1,71 @@
+{{!-- Setup the index.handlebars to have the template that Handlebars can render onto. --}}
+<h1>Burgers</h1>
+<ul>
+  {{#each burgers}}
+  	<li>
+       <p>Burger: {{this.burger_name}}</p>
+       	<button id="devourButton" type="submit" name="devour">Devour</button>
+  	</li>
+  {{/each}}
+</ul>
+
+<div id="devouredBurgers"></div>
+
+{{!-- making a post request on the submit button  --}}
+<h2>Add Burger</h2>
+<form id="addBurger" class="button-size">
+  <textarea type="text" name="burger"></textarea>
+  <button type="submit">Add your burger!</button>
+</form>
+
+
+{{!-- jQuery for devour button --}}
+<script type="text/javascript">
+
+   $("#addBurger").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // [name=plan] will find an element with a "name" attribute equal to the string "plan"
+    var newBurger = {
+      burger_name: $("#addBurger [name=burger]").val().trim(),
+      devoured: false
+    };
+
+    // Send the POST request.
+    $.ajax("/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("added a new burger");
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $("#devourButton").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // Get the ID by finding an element with a "name" attribute equal to the string "id"
+    var id = $("[name=devour]").val().trim();
+
+    var devouredBurgers = {
+      burger_name: $("#devouredBurgers [name=burger]").val().trim()
+    };
+
+    // Send the PUT request.
+    $.ajax("/burgers/" + id, {
+      type: "PUT",
+      data: devouredBurgers
+    }).then(
+      function() {
+        console.log("updated id ", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+</script>
