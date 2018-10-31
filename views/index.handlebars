@@ -1,17 +1,25 @@
 {{!-- Setup the index.handlebars to have the template that Handlebars can render onto. --}}
 <h1>Burgers</h1>
-<ul>
-  {{#each burgers}}
-  	<li>
-       <p>Burger: {{this.burger_name}}</p>
-       	<button id="devourButton" type="submit" name="devour">Devour</button>
-  	</li>
-  {{/each}}
-</ul>
 
-<div id="devouredBurgers"></div>
+<h2>Burger to eat...</h2>
+<div id="toEat">
+  <ul>
+    {{#each burgers}}
+    {{#unless devoured}}
+    <li>
+      <p>Burger: {{this.burger_name}}</p>
+      <button class="devourButton" type="submit" data-id="{{id}}" name="devour">Devour</button>
+    </li>
+    {{/unless}}
+    {{/each}}
+  </ul>
+</div>
 
-{{!-- making a post request on the submit button  --}}
+<h2>Burgers devoured!</h2>
+<div id="devoured"></div>
+
+
+{{!-- making a post request on the submit button --}}
 <h2>Add Burger</h2>
 <form id="addBurger" class="button-size">
   <textarea type="text" name="burger"></textarea>
@@ -22,7 +30,7 @@
 {{!-- jQuery for devour button --}}
 <script type="text/javascript">
 
-   $("#addBurger").on("submit", function(event) {
+  $("#addBurger").on("submit", function (event) {
     // Make sure to preventDefault on a submit event.
     event.preventDefault();
 
@@ -37,7 +45,7 @@
       type: "POST",
       data: newBurger
     }).then(
-      function() {
+      function () {
         console.log("added a new burger");
         // Reload the page to get the updated list
         location.reload();
@@ -45,13 +53,14 @@
     );
   });
 
-  $("#devourButton").on("submit", function(event) {
+  $(".devourButton").on("click", function (event) {
     // Make sure to preventDefault on a submit event.
     event.preventDefault();
 
     // Get the ID by finding an element with a "name" attribute equal to the string "id"
-    var id = $("[name=devour]").val().trim();
+    var id = $("[name=id]").val().trim();
 
+    $(.this).css("background-color", "red");
     var devouredBurgers = {
       burger_name: $("#devouredBurgers [name=burger]").val().trim()
     };
@@ -61,7 +70,7 @@
       type: "PUT",
       data: devouredBurgers
     }).then(
-      function() {
+      function () {
         console.log("updated id ", id);
         // Reload the page to get the updated list
         location.reload();

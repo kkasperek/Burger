@@ -29,13 +29,13 @@ router.post("/burgers", function (req, res) {
 
 /* UPDATE */
 router.put("/api/burgers/:id", function (req, res) {
-    var condition = "id = " + req.params.id;
+    var burger_id = req.params.id;
 
-    console.log("condition", condition);
+    console.log("burger id", burger_id);
 
     burger.updateOne({
-        devoured: req.body.devoured
-    }, condition, function (result) {
+        devoured: true
+    }, burger_id, function (result) {
         if (err) {
             // If an error occurred, send a generic server failure
             return res.status(500).end();
