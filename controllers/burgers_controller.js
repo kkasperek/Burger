@@ -33,9 +33,7 @@ router.put("/api/burgers/:id", function (req, res) {
 
     console.log("burger id", burger_id);
 
-    burger.updateOne({
-        devoured: true
-    }, burger_id, function (result) {
+    burger.updateOne(["devoured", "id"], [req.body.devoured, burger_id], function (result) {
         if (err) {
             // If an error occurred, send a generic server failure
             return res.status(500).end();
